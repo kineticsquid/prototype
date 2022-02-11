@@ -1,0 +1,34 @@
+<div style="margin-top:24px; margin-bottom:36px; text-align: center;">
+  <!-- badge link -->
+  <a href="/badges/{{ badge.badge_name }}" style="text-decoration:none;">
+
+    <!-- badge card -->
+    <section class="badge-card col-sm-4" style="padding: 10px; border-radius: 10px; text-align: center; min-height: 300px; display: flex; flex-direction: column; align-items: center;  justify-content: center;">
+
+      <!-- badge image -->
+      <div class="col">
+        {% if badge.icon_image_uploaded %}
+          <img src="{{ badge.icon_image }}" alt="{{ badge.title }} Image">
+        {% else %}
+          {% if badge.icon_image_url_exists %}
+            <img src="{{ badge.icon_image_url }}" alt="{{ badge.title }} Image">
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <!-- badge title -->
+      <hr style="position:relative;height:3px;border-top: 0px solid rgba(0, 0, 0, 0.5);"/>
+      <div>
+        <h5 style="font-size: 1.2em; margin:5px; text-align: center;">{{ badge.title }}</h5>
+      </div>
+    </section>
+  </a>
+
+  <!-- custom css for badge card -->
+  <style>
+    .badge-card:hover {
+      transition: 0.2s;
+      background: lightgray;
+    }
+  </style>
+</div>

@@ -1,0 +1,32 @@
+<div class="container">
+  <!-- badge header -->
+  <div class="row">
+    <section class="col">
+      <h1>{{ badge.title }}</h1>
+      {% if current_user and current_user.admin? %}
+        <a
+        class="btn-blue edit-button pull-right"
+        href="/admin/badges/{{ badge.id }}/edit"
+      >
+        {{ ".pages.badges.edit_this_badge" | t }}
+      </a>
+      {% endif %}
+    </section>
+  </div>
+
+  <!-- badge body  -->
+  <div class="row">
+    <div class="col">
+      {% if badge.icon_image_uploaded %}
+        <img src="{{ badge.icon_image }}" alt="{{ badge.title }} Image">
+      {% else %}
+        {% if badge.icon_image_url_exists %}
+          <img src="{{ badge.icon_image_url }}" alt="{{ badge.title }} Image">
+        {% endif %}
+      {% endif %}
+    </div>
+  <section class="col" style="word-break:break-word; line-height: 1.8">
+    {{ badge.content }}
+  </section>
+  </div>
+</div>

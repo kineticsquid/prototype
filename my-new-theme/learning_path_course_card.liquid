@@ -1,0 +1,47 @@
+<article class="path-step-block path-course">
+  <div class="path-course-header">
+    <div class="path-course-image">
+      <a href="{{ course.page_path }}">
+        <img alt="{{ course.name }} Image" src="{{ course.image_url }}">
+      </a>
+    </div>
+    <h3>
+      <a href="{{ course.page_path }}">{{ course.name }}</a>
+    </h3>
+    <div>
+      {{ course.favorites_dropdown }}
+    </div>
+    <div class="path-course-description" style="margin-top: 6px;">
+      <div class="path-course-description-title">
+        {{ ".pages.learning_path.course.about_the_course" | t }}
+      </div>
+      {% if course.short_description != "" %}
+        {{ course.short_description }}
+      {% endif %}
+    </div>
+  </div>
+  <div class="meta-data-outer path-course-metadata" style="position: relative;top:20px;">
+    <div class="table">
+      <ul class="horizontal-list">
+        {% if course.get_metadata_field("effort") %}
+          <li class="path-course-effort-title"><strong>Effort:</strong> {{ course.get_metadata_field("effort")&.value }}</li>
+        {% endif %}
+        {% if course.language_code != null %}
+          <li class="path-course-language_code-title"><strong>Language:</strong> {{course.language_code | upcase}}</li>
+        {% endif %}
+        {% if course.start_display != null %}
+          <li class="path-course-start_display-title"><strong>Delivery Format:</strong> {{course.start_display}}</li>
+        {% endif %}
+        {% if course.org != null %}
+          <li class="path-course-organization-title"><strong>Organization:</strong> {{course.org}}</li>
+        {% endif %}
+        {% if course.number != null %}
+          <li class="path-course-code-title"><strong>Course ID:</strong> {{course.number}}</li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="path-course-actions">
+    <a class="btn btn-blue" href="{{ course.page_path }}">Learn More</a>
+  </div>
+</article>

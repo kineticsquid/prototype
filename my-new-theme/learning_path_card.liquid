@@ -1,0 +1,28 @@
+{% if grid %}
+  <div class="learning_path-box">
+    <a href="/learn/{{ learning_path.slug }}">
+      <div class="learning_path-card" style="background-color: {{ learning_path.card_color }};">
+        <div class="learning_path-image">
+          <img src="{{ learning_path.logo_url }} alt="{{ learning_path.name }} Image" />
+        </div>
+        <div class="learning_path-name">
+          <span style="color: {{ learning_path.title_color }};">{{ learning_path.name }}</span>
+        </div>
+      </div>
+    </a>
+  </div>
+{% else %}
+  <div class="container">
+    {% if  learning_path.title != null and learning_path.title != "" %}
+      <h1 class="headline">{{ learning_path.title }}</h1>
+    {% else %}
+      <h1 class="headline">{{ learning_path.name }}</h1>
+    {% endif %}
+    <div class="courses-grid">
+      {% for course in learning_path.courses %}
+        {% include "course_card" with course %}
+      {% endfor %}
+    </div>
+  </div>
+  <a href="/learn/{{ learning_path.slug }}" class="btn btn-blue">{{ ".pages.embedded_content.learning_path.view_learning_path" | t }}</a>
+{% endif %}

@@ -1,0 +1,17 @@
+<ol>
+  {% if portal.show_privacy_notice %}
+    <li class="nav-colophon-00">
+      <a href="{{ portal.privacy_path }}">{{ '.layouts.bdu.footer_navigation_links.privacy_notice' | t }}</a>
+    </li>
+  {% endif %}
+  {% if portal.show_tos %}
+    <li class="nav-colophon-01">
+      <a href="{{ portal.tos_path }}">{{ '.layouts.bdu.footer_navigation_links.terms_of_service' | t }}</a>
+    </li>
+  {% endif %}
+  {% for menu_item in portal.footer_menu_items %}
+    <li class="nav-colophon-02">
+      <a href="{{ menu_item.url }}">{{ menu_item.label }}</a>
+    </li>
+  {% endfor %}
+</ol>

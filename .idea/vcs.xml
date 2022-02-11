@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/course-discovery" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/credentials" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cs_comments_service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/course-discovery" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/cs_comments_service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/ecommerce" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/edx-analytics-dashboard" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/edx-analytics-data-api" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/edx-e2e-tests" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/edx-notes-api" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/edx-platform" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/frontend-app-gradebook" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/frontend-app-payment" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/frontend-app-publisher" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/src/sn-edx-themes" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/devstack/xqueue" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ecommerce" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/edx-analytics-dashboard" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/edx-e2e-tests" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/edx-notes-api" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/edx-platform" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/frontend-app-gradebook" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/xqueue" vcs="Git" />
+  </component>
+</project>

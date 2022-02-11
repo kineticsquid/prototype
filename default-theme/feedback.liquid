@@ -1,0 +1,69 @@
+<div style="padding: 2rem;">
+  <h1 style="margin-bottom: 0.25rem;">Create Review</h1>
+  <h2 style="text-transform: none;">{{course.name}}:</h2>
+  <img style="width: 250px; height: 187px; object-fit: cover;" src="{{course.image_url}}"
+    alt="{{course.name}} thumbnail">
+
+  <form x-data="{ embed: new URLSearchParams(location.search).get('embed') }"
+    :action="`/courses/{{ course.id }}/feedback?embed=${embed || false}`" method="POST">
+    <input type="hidden" name="authenticity_token" />
+    <input type="hidden" name="_method" value="PUT">
+
+    {{ feedback.error_messages }}
+
+    <div style="margin-top: 2rem;" x-data="rating()">
+      <label for="feedback[rating]">Overall Rating</label>
+      <div>
+        <template x-for="(star, index) in ratings" :key="index">
+          <button type="button" @click="rate(star.amount)" @mouseover="hoverRating = star.amount"
+            @mouseleave="hoverRating = rating" aria-hidden="true" :title="star.label"
+            :style="`color: ${color(star)}; background: transparent; border: none; fill: currentColor;`">
+            <svg xmlns="http://www.w3.org/2000/svg" style="width: 1.5rem; height: 1.5rem;" fill="currentColor"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+          </button>
+        </template>
+      </div>
+      <input hidden type="number" id="feedback[rating]" name="feedback[rating]" x-model.number="rating" min=0 max=5>
+
+      <div style="margin-top: 1.25rem;">
+        <label style="display: block;" for="feedback[review]">Leave a Review (Optional)</label>
+        <textarea name="feedback[review]" id="feedback[review]" cols="64" rows="8" minlength="20" maxlength="1028"
+          placeholder="What did you like about this course? What could have been better?">{{ feedback.review }}</textarea>
+      </div>
+    </div>
+
+    <button style="margin-top: 2rem" class="btn btn-blue" type="submit">Submit</button>
+    {% if feedback.updated_at %}
+      <p>Your response was saved on {{feedback.updated_at | date: "%B %d, %Y"}}</p>
+    {% endif %}
+  </form>
+</div>
+
+
+<script>
+  function rating() {
+    return {
+      rating: '{{ feedback.rating || 0 }}',
+      hoverRating: '{{ feedback.rating || 0 }}',
+      ratings: [{ 'amount': 1, 'label': 'Terrible' }, { 'amount': 2, 'label': 'Bad' }, { 'amount': 3, 'label': 'Okay' }, { 'amount': 4, 'label': 'Good' }, { 'amount': 5, 'label': 'Great' }],
+      rate(amount) {
+        this.rating = amount;
+      },
+      color(star) {
+        let c = 'rgb(156, 163, 175);'
+        if (this.hoverRating >= star.amount) c = 'color: rgb(75, 85, 99);'
+        if (this.rating >= star.amount && this.hoverRating >= star.amount) c = 'rgb(251, 191, 36);'
+        return c;
+      },
+      currentLabel() {
+        let r = this.rating;
+        if (this.hoverRating != this.rating) r = this.hoverRating;
+        let i = this.ratings.findIndex(e => e.amount == r);
+        if (i >= 0) { return this.ratings[i].label; } else { return '' };
+      }
+    }
+  }
+</script>

@@ -1,0 +1,38 @@
+<header id="global-navigation" class="header-global">
+  <nav class="wrapper-header" aria-label="Global">
+    <h1 class="logo">
+      <a href="{% if portal.logo_link_url != "" %}{{portal.logo_link_url}}{% else %}/{% endif %}">
+        {% if portal.logo_file_name %}
+          <img src="{{ portal.logo_url | image_path }}" alt="Skills Network Logo" />
+        {% else %}
+          <img src="{{ "cc/sn-logo.png" | image_path }}" alt="Skills Network Logo" />
+        {% endif %}
+      </a>
+    </h1>
+
+    <ol class="left nav-global list-inline authenticated">
+      {% include "header_menu_items" %}
+    </ol>
+
+    {% include "mobile_dropdown" %}
+
+    {% if current_user %}
+      {% include "user_dropdown" %}
+    {% else %}
+      <ol class="right nav-courseware list-inline">
+        {% if portal.show_register_button? %}
+          <li class="item nav-courseware-01">
+            <a class="btn-neutral btn-register" href="{{ portal.register_path }}">{{ "register" | t }}</a>
+          </li>
+        {% endif %}
+        <li class="item nav-courseware-02">
+          <a class="btn btn-login" href="{{ portal.login_path }}">{{ "sign_in" | t }}</a>
+        </li>
+      </ol>
+    {% endif %}
+
+    {% if current_user %}
+      {% include "search_bar" %}
+    {% endif %}
+  </nav>
+</header>

@@ -1,0 +1,197 @@
+<div class="page-learning-path {{learning_path.slug}}">
+  <!-- Learning path header -->
+  <section class="page-header">
+    <div class="container">
+      {% if learning_path.title != null and learning_path.title != "" %}
+        <h1 class="headline">{{ learning_path.title }}</h1>
+      {% endif %}
+      {% if learning_path.subtitle != null and learning_path.subtitle != "" %}
+        <h2>{{ learning_path.subtitle }}</h2>
+      {% endif %}
+      {% if current_user and current_user.admin? %}
+        <a
+        class="btn-blue edit-button pull-right"
+        href="/admin/learning_paths/{{ learning_path.id }}/edit"
+      >
+        {{ ".pages.learning_path.edit_this_learning_path" | t }}
+      </a>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Learning path content -->
+  <section class="container">
+
+    <!-- links breadcrumbs -->
+    <ol class="breadcrumb">
+      <li>
+        <a href="{{ portal.home_page_path }}" style="color: #005584;">{{ portal.site_name }} Portal</a>
+      </li>
+      <li>
+        {{ ".pages.learning_path.learning_paths_crumb" | t }}
+      </li>
+      <li>
+        <a href="/learn/{{ learning_path.slug }}" style="color: #005584;">{{ learning_path.name }}</a>
+      </li>
+    </ol>
+
+    <!-- content -->
+    <div class="path-content-wrapper">
+
+      <!-- alert and top html content -->
+      {% if learning_path.published == false %}
+        <div class="alert alert-info">{{ ".pages.learning_path.this_learning_path_is_html" | t }}</div>
+      {% endif %}
+      {% if learning_path.html_content != "" %}
+        <section class="path-content">
+          {{ learning_path.html_content }}
+        </section>
+      {% endif %}
+
+      <!-- courses in the learning path -->
+      {% if learning_path.courses != null %}
+        <section class="path-courses">
+          {% if learning_path.courses_header != null %}
+            <h2>{{ learning_path.courses_header }}</h2>
+          {% endif %}
+          {% for course in learning_path.courses %}
+            <div class="path-step">
+              {% if forloop.first == true %}
+                <div class="node first">
+                  <div class="bullet"></div>
+                </div>
+              {% elsif forloop.last == true %}
+                <div class="node last">
+                  <div class="bullet"></div>
+                </div>
+              {% else %}
+                <div class="node">
+                  <div class="bullet"></div>
+                </div>
+              {% endif %}
+              {% include "learning_path_course_card" with course %}
+            </div>
+          {% endfor %}
+        </section>
+      {% endif %}
+
+      <!-- quicklabs in the learning path -->
+      {% if learning_path.quicklabs != null %}
+        <section class="path-quicklabs">
+          {% for quicklab in learning_path.quicklabs %}
+            <div class="path-step">
+              {% if forloop.first == true %}
+                <div class="node first">
+                  <div class="bullet"></div>
+                </div>
+              {% elsif forloop.last == true %}
+                <div class="node last">
+                  <div class="bullet"></div>
+                </div>
+              {% else %}
+                <div class="node">
+                  <div class="bullet"></div>
+                </div>
+              {% endif %}
+              {% include "quicklab_card" with quicklab %}
+            </div>
+          {% endfor %}
+        </section>
+      {% endif %}
+
+      <!--  bottom html content -->
+      {% if learning_path.html_bottom_content != "" %}
+        {{ learning_path.html_bottom_content }}
+      {% endif %}
+
+      <!-- certificate component -->
+      {% if learning_path.certificates_enabled == true %}
+        <div class="cert">
+          <div class="col-md-7">
+            <div id="wrap">
+              <iframe title="learning-path-certificate-preview-iframe" id="frame"></iframe>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <h4><strong>How to obtain your certificate for the "{{ learning_path.name }}" learning path.</strong></h4>
+            <ul class="steps-list">
+              <li>{{ ".pages.learning_path.cert_step_1_html" | t }}</li>
+              <li>{{ ".pages.learning_path.cert_step_2_html" | t }}</li>
+              <li>{{ ".pages.learning_path.cert_step_3_html" | t }}</li>
+            </ul>
+            <button class="btn btn-blue" id="generate", style="z-index: 10;">
+              {{ ".pages.learning_path.request_certificate" | t }}
+            </button>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- claim badge component -->
+      {% if learning_path.badges_enabled == true %}
+        {% if learning_path.issued_badge_exists == false %}
+          <div class="col-md-12">
+            <h4>{{ ".pages.learning_path.how_to_obtain_badge_html" | t: lp_name: learning_path.slug }}</h4>
+            <ul class="steps-list">
+              <li>{{ ".pages.learning_path.badge_step_1_html" | t }}</li>
+              <li>{{ ".pages.learning_path.badge_step_2_html" | t }}</li>
+              <li>{{ ".pages.learning_path.badge_step_3_html" | t }}</li>
+              <li>{{ ".pages.learning_path.badge_step_4_html" | t }}</li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <img class="badge-image" src="{{ learning_path.badge_image_url }}" alt="{{ learning_path.name }} Image"/>
+          </div>
+        {% endif %}
+        <div class="col-md-8" style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
+          <h1 style="font-weight: bold; letter-spacing: 0.05em;">{{ learning_path.badge_name }}</h1>
+          <p style="line-height: 1.5; margin-bottom: 16px;">{{ learning_path.badge_description }}</p>
+          {% if learning_path.issued_badge_exists == true %}
+            <!-- nested form for badge request -->
+            {% if learning_path.issued_badge_exists == true and learning_path.issued_badge_state == "pending" %}
+              <div class="label label-info">{{learning_path.issued_badge_state}}</div>
+              <small style="line-height: 1.5; margin-top: 16px;">{{ ".pages.learning_path.badge_accepted" | t }}</small>
+              <br/>
+              {{ ".pages.learning_path.badge_check_email_html" | t: href_string: learning_path.issued_badge_accept_url }}
+            {% elsif learning_path.issued_badge_exists == true %}
+              <div class="label label-success">{{learning_path.issued_badge_state}}</div>
+              <p style="margin-top: 16px;">{{ ".pages.learning_path.badge_view_html" | t: href_string: learning_path.issued_badge_url }}</p>
+            {% endif %}
+          {% else %}
+            {% if learning_path.eligible_for_badge? == true %}
+              <form
+              action="/learn/{{ learning_path.slug }}/badges?method=POST"
+              accept-charset="UTF-8"
+              method="post">
+                <input
+                  type="hidden"
+                  name="authenticity_token"
+                />
+                <div>
+                  <input type="checkbox" name="consent" id="consent" value="1" /><label
+                    style="margin-left: 8px; line-height: 1.5"
+                    for="consent"
+                    >I acknowledge that my data will be shared with
+                    <a
+                      href="https://info.credly.com/"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      >Credly</a
+                    >
+                  </label>
+                </div>
+                  <input
+                    type="submit"
+                    name="commit"
+                    value="Request Badge"
+                    class="btn btn-blue btn-request-badge"
+                    style="margin-top: 24px"
+                    data-disable-with="Request Badge"
+                  />
+              </form>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+</div>

@@ -1,0 +1,147 @@
+<!-- (parent container of the course detail page) -->
+<section class="container" aria-label="{{course.name}} Info">
+
+  <!-- header section -->
+  <div class="row course-details-header">
+    <div class="col-md-4 col-md-push-8 text-center">
+      <img src="{{ course.image_url }}" alt="{{course.name}} Image"/>
+    </div>
+    <div class="col-md-8 col-md-pull-4">
+      <h2>{{ course.org }}</h2>
+      <h1>{{ course.name }}</h1>
+      <p class="">
+        <svg xmlns="http://www.w3.org/2000/svg" style="color: rgb(251, 191, 36); height: 1.5rem; width: 1.5rem; vertical-align: top;" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        {% if course.rating > 0 %}
+          {{ course.rating }}/5 <span style="opacity: 60%;">({{ course.abbreviated_review_count }})</span>
+        {% else %}
+          No ratings yet
+        {% endif %}
+      </p>
+      <p style="margin-bottom: 2rem;">{{ course.short_description }}</p>
+
+      {% if course.display_invite_warning %}
+        <p class="alert alert-warning" style="font-size: 16px !important">
+          <i class="fa fa-warning" style="margin-right: 12px;">
+          </i>
+          {{ ".courses.show.this_course_is_invite_only_html" | t }}
+        </p>
+      {% endif %}
+
+      <!-- enrollment button -->
+      {% if course.enrolled %}
+        <a class="btn btn-blue btn-course-action" href="{{ course.enrolled_path }}">{{ ".go_to_class" | t }}</a>
+      {% elsif course.enrollment_closed %}
+        <a class="btn btn-blue btn-course-action" href="#" disabled>{{ ".courses.show.enrollment_closed" | t }}</a>
+      {% elsif current_user %}
+        <a class="btn btn-blue btn-course-action" rel="nofollow" data-method="post" href="/courses/{{ course.id }}/enroll">{{ ".enroll" | t }}</a>
+      {% else %}
+        <a class="btn btn-blue btn-course-action" href="/login?next=/courses/{{ course.id }}/auto_enroll">{{ ".login_to_enroll" | t }}</a>
+      {% endif %}
+
+      <!-- favorites dropdown -->
+      {{ course.favorites_dropdown }}
+    </div>
+  </div>
+
+  <!-- body section -->
+  <div class="row course-details-content">
+
+    <!-- info sections -->
+    <div class="col-md-4 col-md-push-8">
+      <ul class="course-details-info">
+
+        <!-- course number / course code -->
+        <li class="course-details-info-item">
+          <div class="course-details-info-item-title">
+            <i class="fa fa-info-circle">
+            </i>
+            {{ ".course_number" | t }}
+          </div>
+          <div class="course-details-info-item-text">
+            {{ course.number }}
+          </div>
+        </li>
+
+        <!-- course starting date -->
+        {% if course.start_display != "" %}
+          <li class="course-details-info-item">
+            <div class="course-details-info-item-title">
+              <i class="fa fa-info-circle">
+              </i>
+              {{ ".course_start" | t }}
+            </div>
+            <div class="course-details-info-item-text">
+              {% if course.pacing == "self" %}
+                {{ ".self_paced" | t }}
+              {% else %}
+                {{ course.start_display }}
+              {% endif %}
+            </div>
+          </li>
+        {% endif %}
+
+        <!-- course enrollment closing soon warning -->
+        {% if course.enrollment_closing_soon == true %}
+          <li class="course-details-info-item">
+            <div class="course-details-info-item-title">
+              {% if course.enrollment_closed == true %}
+                <i class="fa fas fa-exclamation-circle" style="color: red;">
+                </i>
+                {{ ".courses.show.enrollment_closed" | t }}
+              {% else %}
+                <i class="fa fas fa-exclamation-circle" style="color: orange;">
+                </i>
+                {{ ".courses.show.enrollment_closes" | t }}
+              {% endif %}
+            </div>
+            <div class="course-details-info-item-text" x-data="{ date: {{ course.enrollment_end }}}">
+              <span x-text="new Date(date).toLocaleString(undefined, {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})"></span>
+            </div>
+          </li>
+        {% endif %}
+
+        <!-- metadata fields -->
+        {% for metadata_field in course.metadata_fields %}
+          <li class="{{ metadata_field.parameterized_name }}" style="padding-bottom: 10px; margin-bottom: 20px; border-bottom: 1px dotted #bbbbbb;")>
+            <div class="course-details-info-item-title">
+              <i class="fa fa-{{metadata_field.icon}}">
+              </i>
+              {{ metadata_field.humanized_name }}
+            </div>
+            <div class="course-details-info-item-text">
+              {{ metadata_field.value }}
+            </div>
+          </li>
+        {% endfor %}
+
+        <!-- pacing -->
+        {% if course.pacing != "self" %}
+          <li class="course-details-info-item">
+            {% if course.google_export_link != "" %}
+              <a class="btn btn-blue" href="{{ course.google_export_link }}" target="_blank" style="margin: 2px; margin-left: 0; padding: 5px; color: white; width: 11rem;">
+                <i class="fa fa-google" style="margin-right: 4.5px; color: white;" >
+                </i>
+                {{ ".courses.show.google_calendar" | t }}
+              </a>
+            {% endif %}
+            {% if course.outlook_export_link != "" %}
+              <a class="btn btn-blue" href="{{ course.outlook_export_link }}" target="_blank" style="margin: 2px; margin-left: 0; padding: 5px; color: white; width: 11rem;">
+                <i class="fa fa-calendar" style="margin-right: 4.5px; color: white;" >
+                </i>
+                {{ ".courses.show.outlook_ical" | t }}
+              </a>
+            {% endif %}
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <!-- content section -->
+    <div class="col-md-8 col-md-pull-4">
+      {{ course.course_content }}
+    </div>
+
+  </div>
+</section>

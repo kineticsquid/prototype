@@ -1,0 +1,25 @@
+<div class="wrapper wrapper-footer" role="main">
+  <footer id="footer-openedx" class="footer grid-container" aria-label="footer">
+    <div class="colophon">
+      <nav class="nav-colophon" aria-label="About">
+        {% include "footer_menu_items" %}
+      </nav>
+    </div>
+
+    {% if portal.show_powered_by_logo %}
+      <div class="footer-about-openedx">
+        <p class="powered-by">{{ '.layouts.bdu.footer.powered_by' | t }}</p>
+        <a>
+          <img alt="organization logo" src="{{ "cc/sn-logo.png" | image_path }}" alt="Skills Network Logo">
+          IBM Developer
+          <br />
+          Skills Network
+        </a>
+      </div>
+    {% endif %}
+
+    {% if portal.footnote %}
+      <p class="footer footnote">{{ portal.footnote }}</p>
+    {% endif %}
+  </footer>
+</div>
